@@ -1,0 +1,42 @@
+<% size = @events.size %>
+<% count = 1 %>
+<% more = size - 4 %>
+<% @more_events = [] %>
+<% for event in @events %>
+  <% if count < 5 %>
+  <div class="event">
+    <span class="time" title="ends at <%= "#{event.end_dt.hour}:#{event.end_dt.min}" %>">
+      <%=h event.start_dt.hour %>:<%=h event.start_dt.min %>
+    </span>
+    <span class="label"><%=h event.label %></span>
+  </div>    
+  <% elsif count == 5 %>
+    <% if more < 2 %>
+    <div class="event">
+      <span class="time"><%=h event.start_dt.hour %>:<%=h event.start_dt.min %></span>
+      <span class="label"><%=h event.label %></span>
+    </div>
+    <% else %>
+    <div class="more">
+      <%= link_to "+#{more} more", '#', :onclick => "showmore" %>
+    </div>
+    <% @more_events << event %>
+    <% end %>
+  <% elsif count > 5 %>
+    <% @more_events << event %>
+  <% end %>
+  <% count += 1 %>
+<% end %>
+
+<% unless @more_events.blank? %>
+<div id="more" class="more_events">
+  <% for mevent in @more_events %>
+  <div class="event">
+    <span class="time" title="ends at <%= "#{mevent.end_dt.hour}:#{mevent.end_dt.min}" %>">
+      <%=h mevent.start_dt.hour %>:<%=h mevent.start_dt.min %>
+    </span>
+    <span class="label"><%=h mevent.label %></span>
+  </div>
+  <% end %>
+</div>
+<% end %>
