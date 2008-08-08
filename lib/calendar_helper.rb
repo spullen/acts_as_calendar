@@ -30,7 +30,7 @@ module CalendarHelper
                                               render(:partial => 'calendar/form', :object => @cal) + 
                                               calendar_header +
                                               cal_body
-                                            ), :id => 'calendar_container')
+                                            ), :class => 'calendar_container')
       when Calendar::MODE_WEEK:
         # build the week view
       when Calendar::MODE_DAY:
@@ -45,7 +45,7 @@ module CalendarHelper
   #
   ###################################################
   def calendar_header(cal)
-    content_tag(:div, cal.month_name + ' ' + cal.day.to_s + ', ' + cal.year.to_s, :id => 'month_header')
+    content_tag(:div, cal.month_name + ' ' + cal.day.to_s + ', ' + cal.year.to_s, :class => 'month_header')
   end
   
   ###################################################
@@ -57,10 +57,10 @@ module CalendarHelper
   def calendar_day_headers
     headers = Array.new     
     Date::DAYNAMES.each do |day|
-      headers << content_tag(:div, day, :id => 'day_header')
+      headers << content_tag(:div, day, :class => 'day_header')
     end
-    headers << content_tag(:div, nil, :id => 'clear_div')
-    content_tag(:div, headers.join , :id => 'day_headers')
+    headers << content_tag(:div, nil, :class => 'clear_div')
+    content_tag(:div, headers.join , :class => 'day_headers')
   end
   
   ###################################################
@@ -78,7 +78,7 @@ module CalendarHelper
       if cal.start_dow > 0
         offset = 0
         while offset < cal.start_dow
-          week << content_tag(:div, '&nbsp;', :id => 'day_blank')
+          week << content_tag(:div, '&nbsp;', :class => 'day_blank')
           offset += 1
         end
       end
@@ -91,21 +91,22 @@ module CalendarHelper
         style = 'day'
         unless cal.selected_date.nil?
           if cal.selected_date == date
-            style += '_curr'
+            style += ' curr'
           end
         end
         
         # build the day div w/ the data that should be put there
         content = date.strftime("%d").to_s + tag(:br)
+        content = content_tag(:div, content, :class => 'head')
         if !events[date.to_s].nil? && !partial.nil?
           @events = events[date.to_s]
           content += render(:partial => partial, :object => @events) 
         end
-        week << content_tag(:div, content, :id => style)
+        week << content_tag(:div, content, :class => style)
         
         if dow != 0 && ((dow % 6) == 0) && date.strftime("%w").to_i < 28
-          week << content_tag(:div, '', :id => 'clear_div')
-          weeks << content_tag(:div, week.join, :id => 'week')
+          week << content_tag(:div, '', :class => 'clear_div')
+          weeks << content_tag(:div, week.join, :class => 'week')
           week.clear
         end
       }
@@ -114,13 +115,13 @@ module CalendarHelper
       if cal.end_dow < 6
         offset = cal.end_dow
         while offset < 6
-          week << content_tag(:div, '&nbsp;', :id => 'day_blank')
+          week << content_tag(:div, '&nbsp;', :class => 'day blank')
           offset += 1
         end
       end
       
       # combine all of the weeks to finish the calendar build
-      weeks << content_tag(:div, week.join, :id => 'week')
+      weeks << content_tag(:div, week.join, :class => 'week')
       week.clear
 
       weeks = weeks.join
