@@ -4,49 +4,60 @@ require 'find'
 include FileUtils
 
 RAILS_DIR = File.expand_path('./../../../')
-SRC_DIR = File.expand_path('./files/')
 
-files = Array.new
+puts "Installing the acts_as_calendar plugin\n\n"
 
-# go through and find each file to install
-puts "The following files will be added to your project:\n"
-chdir(RAILS_DIR) do 
-  Find.find(SRC_DIR) do |path|
-    fname = path.sub(SRC_DIR, '')
-    puts fname
-    files << fname
-  end
+# check to see if the calendar directory exists
+if !File.exist?(RAILS_DIR + '/app/views/calendar')
+  puts "Creating the calendar folder\n"
+  FileUtils.mkdir(RAILS_DIR + '/app/views/calendar')
 end
 
-# copy the files all over
-files.each do |fname|
-  action_needed_confirmation = ''
-  if FileTest.exists?(RAILS_DIR + fname)
-    puts "#{fname} already exists"
-    begin
-      puts "Choose the action you want to take:\n"
-      puts "use y/Y if you want to overwrite this file \n"
-      puts "Use n/N if you do not want to overwrite this file \n"
-      puts "Use q/Q to quit the current operation \n"
-      action_needed_confirmation = gets.strip.downcase[0..1] rescue nil
-    end while !%w[y n q].include?(action_needed_confirmation)
-    
-    action = action_needed_confirmation
-    # depending on the action write or ignore the file
-    if action == 'y' || action.empty?
-      puts "Copying/overwriting #{fname} over\n"
-    elsif action == 'n'
-      puts "Ignoring #{fname}\n"
-      next
-    elsif
-      puts "Quitting Current Operation\n"
-      exit
-    end
+# check to see if the form for the calendar exists
+if File.exist?(RAILS_DIR + '/app/views/calendar/_form.html.erb')
+  action = ''
+  begin
+    puts "app/views/calendar/_form.html.erb already exists, overwrite it? (y/N)\n"
+    # get the action response
+    action = gets.strip.downcase[0..1] rescue nil
+  end while !%[y n].include?(action)
+  
+  # decipher the action
+  if action == 'y'
+    puts "Copying _form.html.erb into app/views/calendar \n"
+    FileUtils.cp('./files/app/views/calendar/_form.html.erb', RAILS_DIR + '/app/views/calendar' )
+  else
+    puts "Skipping _form.html.erb ...\n"
   end
   
-  # copy the file over since the user didn't quit or ignore
-  FileUtils.cp(fname, RAILS_DIR + fname)
-  
+else
+  puts "Copying _form.html.erb into app/views/calendar \n"
+  FileUtils.cp('./files/app/views/calendar/_form.html.erb', RAILS_DIR + '/app/views/calendar' )
 end
 
-puts "Installation Done!\n"
+# check to see if the stylesheet is included
+if File.exist?(RAILS_DIR + '/public/stylesheets/calendar.css')
+  action = ''
+  begin
+    puts "public/stylesheets/calendar.css already exists, overwrite it? (y/N)\n"
+    action = gets.strip.downcase[0..1] rescue nil
+  end
+  
+  if action == 'y'
+    puts "Copying calendar.css into public/stylesheets\n"
+    FileUtils.cp('./files/public/stylesheets/calendar.css', RAILS_DIR + '/public/stylesheets')
+  else
+    puts "Skipping calendar.css ... \n"
+  end
+  
+else
+  puts "Copying calendar.css into public/stylesheets\n"
+  FileUtils.cp('./files/public/stylesheets/calendar.css', RAILS_DIR + '/public/stylesheets')
+end
+
+# finished copying files over
+puts "Installation Complete\n\n"
+
+# display README
+puts IO.read(File.join(File.dirname(__FILE__), 'README'))
+puts "\n"

@@ -34,9 +34,19 @@ end
 In View:
 
 ...
-<%= render :partial => 'calendar/calendar', :object => @calendar %>
+<%= generate_calendar(@calendar, 'your_view_path/partial_name') %>
 ...
 
-# plans are to make this into a helper function to further hide/ make the process easier
+# the partial is optional, but you need it is you want to display data on the calendar
 
-Copyright (c) 2008 [Scott Pullen], released under the MIT license
+Partial View File:
+
+This is how you make you partial that is to be displayed on the calendar:
+
+<% @events.each do |event| -%>
+    <!-- do stuff here -->
+<% end -%>
+
+**note: the use of @events is required in order for this to work.
+
+Copyright (c) 2008 Scott Pullen, released under the MIT license
