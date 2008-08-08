@@ -2,23 +2,28 @@ require 'date'
 
 class Calendar
   
+  # constants for displaying calendars
+  MODE_CALENDAR = 0
+  MODE_WEEK = 1
+  MODE_DAY = 2
+  
   attr_accessor :year, :month, :day, :selected_date, :start_date, :start_dow, :end_date, :end_dow,
                           :prev_day, :prev_week, :prev_month, :prev_year, :next_day, :next_week, :next_month, :next_year,
                           :month_name
   
-  def initialize(year, month, day)
-    # convert the values to make sure they are integers
-    year = year.to_i
-    month = month.to_i
-    day = day.to_i
+  def initialize(year, month, day, mode=MODE_CALENDAR, include_selected=true)
     
-    fail 'month not in range' if month < 1 || month > 12
+    fail 'year required' if year.nil?
+    fail 'month required' if month.nil?
+    fail 'day required' if day.nil? unless mode == MODE_CALENDAR
     
-    @year = year
-    @month = month
-    @day = day
+    @year = year.to_i
+    @month = month.to_i
+    @day = day.to_i 
     
-    @selected_date = Date.new(@year, @month, @day)
+    fail 'month not in range' if @month < 1 || @month > 12
+    
+    @selected_date = Date.new(@year, @month, @day) if include_selected
     
     # find the start date of the month
     @start_date = Date.new(@year, @month, 1)

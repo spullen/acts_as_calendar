@@ -18,11 +18,22 @@ module ClassMethods
   end
   
   # generate the calendar for month
-  def calendar(year, month, day, optional_params = {})
+  def calendar(year, month, day=nil, optional_params = {})
     attr_accessor :events # a hash to put events into that will be parsed
     attr_accessor :cal # the calendar object, stores useful information about the date range
     
-    @cal = Calendar.new(year, month, day)
+    # set the calendar mode if it was not set
+    optional_params[:mode] = Calendar::MODE_CALENDAR if optional_params[:mode].nil?
+    
+    # if year month and day are nil then use today as the main point
+    if year.nil? && month.nil? && day.nil?
+      year = Time.now.strftime("%Y").to_i
+      month = Time.now.strftime("%m").to_i
+      day = Time.now.strftime("%d").to_i
+    end
+    day = 1 if day.nil?
+    
+    @cal = Calendar.new(year, month, day, optional_params[:mode])
     @events = {}
     
     # get the range for the month
@@ -71,4 +82,12 @@ end
 module InstanceMethods
   # add any instance methods for the object
   # ex: @user.some_instance_method
+  
+  # TODO: methods to add:
+  #
+  # overlaps with existing event
+  # conflicts with existing event
+  # conflicts with existing event with conditions on it (like only reservations in one location)
+  # 
+  #
 end

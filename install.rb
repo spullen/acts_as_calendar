@@ -55,6 +55,15 @@ else
   FileUtils.cp('./files/public/stylesheets/calendar.css', RAILS_DIR + '/public/stylesheets')
 end
 
+# TODO: create the routes for the calendar
+# need to check to see if it exists or not
+# map.connect ':controller/calendar/:year/:month/:day', {:action => 'calendar',
+#                                                                                                 :year => nil,
+#                                                                                                 :month => nil,
+#                                                                                                 :day => nil,
+#                                                                                                 # validation for date ranges with regex
+#                                                                                                 }
+
 # finished copying files over
 puts "Installation Complete\n\n"
 

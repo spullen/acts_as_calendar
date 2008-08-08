@@ -11,24 +11,31 @@ module CalendarHelper
   # @return calendar in html form
   #
   ###################################################
-  def generate_calendar(calendar_data, partial=nil)
-    @events = calendar_data[0] unless calendar_data.nil?
-    @cal = calendar_data[1] unless calendar_data.nil?
-    if !@cal.nil?
-      header =  calendar_header(@cal)
-      calendar_header = tag(:br) + calendar_day_headers
-      cal_body =  calendar_body(@cal, @events, partial)
-    else
-      header = ''
-      calendar_header = ''
-      cal_body = ''
+  def generate_calendar(calendar_data, partial=nil, mode=Calendar::MODE_CALENDAR)
+    case mode
+        when Calendar::MODE_CALENDAR:
+          @events = calendar_data[0] unless calendar_data.nil?
+          @cal = calendar_data[1] unless calendar_data.nil?
+          if !@cal.nil?
+            header =  calendar_header(@cal)
+            calendar_header = tag(:br) + calendar_day_headers
+            cal_body =  calendar_body(@cal, @events, partial)
+          else
+            header = ''
+            calendar_header = ''
+            cal_body = ''
+          end
+          return content_tag(:div,(header+
+                                              tag(:br) +
+                                              render(:partial => 'calendar/form', :object => @cal) + 
+                                              calendar_header +
+                                              cal_body
+                                            ), :id => 'calendar_container')
+      when Calendar::MODE_WEEK:
+        # build the week view
+      when Calendar::MODE_DAY:
+        # build the day view
     end
-    return content_tag(:div,(header+
-                                        tag(:br) +
-                                        render(:partial => 'calendar/form', :object => @cal) + 
-                                        calendar_header +
-                                        cal_body
-                                      ), :id => 'calendar_container')
   end
   
   ###################################################
@@ -82,8 +89,10 @@ module CalendarHelper
         
         # figure out the class name
         style = 'day'
-        if cal.selected_date == date
-          style += '_curr'
+        unless cal.selected_date.nil?
+          if cal.selected_date == date
+            style += '_curr'
+          end
         end
         
         # build the day div w/ the data that should be put there
