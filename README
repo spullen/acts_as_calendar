@@ -1,0 +1,42 @@
+ActsAsCalendar
+==============
+
+Creates all of the necessary functionality for a calendar.
+
+The calendar class creates a useful tool to figure out dates necessary for calendars.
+Extends Active Record, uses aliases to use your table, easy to drop into existing models
+with start and end datetimes/dates.
+CalendarHelper has useful functions for building the calendar, mostly used behind the scenes
+hidden from the programmer, so you don't have to worry about it (that is unless you want to 
+improve the code :) ).
+
+
+Example
+=======
+
+In AR Model:
+
+def SomeModel < AR::Base
+  acts_as_calendar :calendar_start_dt_field => :start_dt, :calendar_end_dt_field => :end_dt, :calendar_event_title_field => :event_title
+end
+
+# example shows default values if you don't include the association, but feel free to change them to fit your model's table
+# as the plugin just aliases the field names you pass in.
+
+In Controller:
+
+def calendar
+  unless params[:year].nil? # just a check, current won't deal with nil parameters, the view will however
+    @calendar = SomeModel.calendar(params[:year], params[:month], params[:day])
+  end
+end
+
+In View:
+
+...
+<%= render :partial => 'calendar/calendar', :object => @calendar %>
+...
+
+# plans are to make this into a helper function to further hide/ make the process easier
+
+Copyright (c) 2008 [Scott Pullen], released under the MIT license

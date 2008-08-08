@@ -1,0 +1,60 @@
+div.calendar_container {
+  width: 890px;
+}
+
+#calendar_form {
+  text-align: center;
+}
+
+#month_header{
+  text-align: center;
+}
+
+#day_headers{
+  
+}
+
+#day_header {
+  width: 125px;
+  text-align: center;
+  float: left;
+  position: relative;
+}
+
+#week{
+  height: 100%;
+  /*min-height: 125px;*/
+}
+
+#day {
+  width: 125px;
+  height: 100%;
+  min-height: 80px;
+  background-color: #bacfe6;
+  vertical-align: text-top;
+  float: left;
+  position: relative;
+}
+
+#day_curr {
+  width: 125px;
+  height: 100%;
+  min-height: 80px;
+  background-color: #aaa;
+  vertical-align: text-top;
+  float: left;
+  position: relative;
+}
+
+#day_blank {
+  width: 125px;
+  height: 100%;
+  min-height: 80px;
+  vertical-align: text-top;
+  float: left;
+  position: relative;
+}
+
+#clear_div{
+  clear: both;
+}
