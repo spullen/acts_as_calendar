@@ -11,11 +11,12 @@ module CalendarHelper
   # @return calendar in html form
   #
   ###################################################
-  def generate_calendar(calendar_data, partial='calendar/day_info', mode=Calendar::MODE_CALENDAR)
+  def generate_calendar(calendar_data, partial='calendar/day_info')
+    @events = calendar_data[0] unless calendar_data.nil?
+    @cal = calendar_data[1] unless calendar_data.nil?
     case mode
         when Calendar::MODE_CALENDAR:
-          @events = calendar_data[0] unless calendar_data.nil?
-          @cal = calendar_data[1] unless calendar_data.nil?
+          
           if !@cal.nil?
             header =  calendar_header(@cal)
             calendar_header = tag(:br) + calendar_day_headers
@@ -126,5 +127,14 @@ module CalendarHelper
 
       weeks = weeks.join
       return weeks
+    end
+    
+    ###################################
+    #
+    # Subs the AM PM with a.m. p.m.
+    #
+    ###################################
+    def alt_am_pm_datetime(_datetime, format="%h:%m %p")
+      return _datetime.strftime(format).gsub(/AM/, "a.m.").gsub(/PM/, "p.m")
     end
 end

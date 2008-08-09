@@ -78,14 +78,15 @@ end
 # need to check to see if it exists or not
 
 # this is what i'm using at the moment -asoules
-# map.connect ':controller/calendar/:year/:month/:day',
+# map.connect ':controller/calendar/:mode/:year/:month/:day', {
 #     :action => 'calendar',
+#     :mode => 'month',
 #     :year => nil,
 #     :month => nil,
 #     :day => nil,
 #     :requirements => { :year => /\d{4}/, 
 #                        :month => /\d{1,2}/,
-#                        :day => /\d{1,2}/ }
+#                        :day => /\d{1,2}/ }}
                         
 # finished copying files over
 puts "Installation Complete\n\n"

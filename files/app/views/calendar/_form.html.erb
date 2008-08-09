@@ -5,7 +5,12 @@
       <%= text_field_tag 'year', params['year'] || '', :size => 4, :maxlength => 4, :class => 'form_year', :id => 'form_year' %> 
       <%= submit_tag 'Search' %>
     <% end -%>
-    <br/>
+    <span class="mode_links">
+      <%= link_to 'day', :action => :calendar, :params => params.merge!({:mode => 'day'}) %>
+      <%= link_to 'week', :action => :calendar, :params => params.merge!({:mode => 'week'}) %>
+      <%= link_to 'month', :action => :calendar, :params => params.merge!({:mode => 'month'}) %>
+    </span>
+    <br/><br/>
     <% unless @cal.nil? -%>   
       <span class="cal_nav_link">
         <%= link_to '<<< Prev Year', :action => :calendar, :params => {:year => @cal.prev_year.year, :month => @cal.prev_year.month, :day => @cal.prev_year.day} %>

@@ -3,23 +3,24 @@ require 'date'
 class Calendar
   
   # constants for displaying calendars
-  MODE_CALENDAR = 0
-  MODE_WEEK = 1
-  MODE_DAY = 2
+  MODE_MONTH = 'month'
+  MODE_WEEK = 'week'
+  MODE_DAY = 'day'
   
   attr_accessor :year, :month, :day, :selected_date, :start_date, :start_dow, :end_date, :end_dow,
                           :prev_day, :prev_week, :prev_month, :prev_year, :next_day, :next_week, :next_month, :next_year,
-                          :month_name
+                          :month_name, :mode
   
-  def initialize(year, month, day, mode=MODE_CALENDAR, include_selected=true)
+  def initialize(year, month, day, mode=MODE_MONTH, include_selected=true)
     
     fail 'year required' if year.nil?
     fail 'month required' if month.nil?
-    fail 'day required' if day.nil? unless mode == MODE_CALENDAR
+    fail 'day required' if day.nil? unless mode == MODE_MONTH
     
     @year = year.to_i
     @month = month.to_i
     @day = day.to_i 
+    
     
     fail 'month not in range' if @month < 1 || @month > 12
     
