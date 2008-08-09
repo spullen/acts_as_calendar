@@ -14,8 +14,8 @@ module CalendarHelper
   def generate_calendar(calendar_data, partial='calendar/day_info')
     @events = calendar_data[0] unless calendar_data.nil?
     @cal = calendar_data[1] unless calendar_data.nil?
-    case mode
-        when Calendar::MODE_CALENDAR:
+    case @cal.mode
+        when Calendar::MODE_MONTH:
           
           if !@cal.nil?
             header =  calendar_header(@cal)
@@ -97,7 +97,7 @@ module CalendarHelper
         end
         
         # build the day div w/ the data that should be put there
-        content = date.strftime("%d").to_s + tag(:br)
+        content = link_to(date.strftime("%d").to_s, :action => 'calendar', :params => {:mode => 'day', :year => date.year, :month => date.month, :day => date.day}) + tag(:br)
         content = content_tag(:div, content, :class => 'head')
         if !events[date.to_s].nil? && !partial.nil?
           @events = events[date.to_s]

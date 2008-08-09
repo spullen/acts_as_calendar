@@ -39,7 +39,7 @@ module ClassMethods
     attr_accessor :cal # the calendar object, stores useful information about the date range
     
     # set the calendar mode if it was not set
-    optional_params[:mode] = Calendar::MODE_CALENDAR if optional_params[:mode].nil?
+    optional_params[:mode] = Calendar::MODE_MONTH if optional_params[:mode].nil?
     
     # if year month and day are nil then use today as the main point
     if year.nil? && month.nil? && day.nil?

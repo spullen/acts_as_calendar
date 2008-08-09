@@ -21,6 +21,7 @@ class Calendar
     @month = month.to_i
     @day = day.to_i 
     
+    @mode = mode
     
     fail 'month not in range' if @month < 1 || @month > 12
     
