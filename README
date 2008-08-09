@@ -56,4 +56,4 @@ Ex:
   <span class="event"><%= event.read_attribute(event.class.calendar_event_title_field) %></span>
 <% end -%>
 
-Copyright (c) 2008 Scott Pullen, released under the MIT license
+Copyright (c) 2008 Scott Pullen, Aaron Soules released under the MIT license
