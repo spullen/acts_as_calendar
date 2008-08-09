@@ -78,7 +78,7 @@ module CalendarHelper
       if cal.start_dow > 0
         offset = 0
         while offset < cal.start_dow
-          week << content_tag(:div, '&nbsp;', :class => 'day_blank')
+          week << content_tag(:div, '&nbsp;', :class => 'day blank')
           offset += 1
         end
       end
