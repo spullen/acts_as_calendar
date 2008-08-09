@@ -49,4 +49,11 @@ This is how you make you partial that is to be displayed on the calendar:
 
 **note: the use of @events is required in order for this to work.
 
+You can make generic partials to be displayed, you just have to explicitly call read_attributes.
+Ex:
+
+<% @events do |event| -%>
+  <span class="event"><%= event.read_attribute(event.class.calendar_event_title_field) %></span>
+<% end -%>
+
 Copyright (c) 2008 Scott Pullen, released under the MIT license
