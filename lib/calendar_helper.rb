@@ -11,7 +11,7 @@ module CalendarHelper
   # @return calendar in html form
   #
   ###################################################
-  def generate_calendar(calendar_data, partial=nil, mode=Calendar::MODE_CALENDAR)
+  def generate_calendar(calendar_data, partial='calendar/day_info', mode=Calendar::MODE_CALENDAR)
     case mode
         when Calendar::MODE_CALENDAR:
           @events = calendar_data[0] unless calendar_data.nil?

@@ -4,22 +4,22 @@
 <% @more_events = [] %>
 <% for event in @events %>
   <% if count < 5 %>
-  <div class="event">
-    <span class="time" title="ends at <%= "#{event.end_dt.hour}:#{event.end_dt.min}" %>">
-      <%=h event.start_dt.hour %>:<%=h event.start_dt.min %>
-    </span>
-    <span class="label"><%=h event.label %></span>
-  </div>    
+    <div class="event">
+      <span class="time" title="ends at <%= event.read_attribute(event.class.calendar_end_dt_field).to_s(:time) %>">
+        <%=h event.read_attribute(event.class.calendar_start_dt_field).to_s(:time) %>
+      </span>
+      <span class="label"><%=h event.read_attribute(event.class.calendar_event_title_field) %></span>
+    </div>    
   <% elsif count == 5 %>
     <% if more < 2 %>
-    <div class="event">
-      <span class="time"><%=h event.start_dt.hour %>:<%=h event.start_dt.min %></span>
-      <span class="label"><%=h event.label %></span>
-    </div>
+      <div class="event">
+        <span class="time"><%=h event.read_attribute(event.class.calendar_start_dt_field).to_s(:time) %></span>
+        <span class="label"><%=h event.read_attribute(event.class.calendar_event_title_field) %></span>
+      </div>
     <% else %>
-    <div class="more">
-      <%= link_to "+#{more} more", '#', :onclick => "showmore" %>
-    </div>
+      <div class="more">
+        <%= link_to "+#{more} more", '#', :onclick => "showmore" %>
+      </div>
     <% @more_events << event %>
     <% end %>
   <% elsif count > 5 %>
@@ -32,10 +32,10 @@
 <div id="more" class="more_events">
   <% for mevent in @more_events %>
   <div class="event">
-    <span class="time" title="ends at <%= "#{mevent.end_dt.hour}:#{mevent.end_dt.min}" %>">
-      <%=h mevent.start_dt.hour %>:<%=h mevent.start_dt.min %>
+    <span class="time" title="ends at <%= "#{mevent.read_attribute(event.class.calendar_end_dt_field).to_s(:time)}" %>">
+      <%=h mevent.read_attribute(event.class.calendar_start_dt_field).to_s(:time) %>
     </span>
-    <span class="label"><%=h mevent.label %></span>
+    <span class="label"><%=h mevent.read_attribute(event.class.calendar_event_title_field) %></span>
   </div>
   <% end %>
 </div>

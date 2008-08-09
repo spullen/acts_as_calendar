@@ -35,6 +35,25 @@ else
   FileUtils.cp('./files/app/views/calendar/_form.html.erb', RAILS_DIR + '/app/views/calendar' )
 end
 
+# check to see if _day_info.html.erb exists or not
+if File.exist?(RAILS_DIR + '/app/views/calendar/_day_info.html.erb')
+  begin 
+    puts "app/views/calendar/_day_info.html.erb already exists, overwrite it? (y/N)\n"
+    action = gets.strip.downcase[0..1] rescue nil
+  end while !%[y n].include?(action)
+  
+  if action == 'y'
+    puts "Copying _day_info.html.erb into app/views/calendar \n"
+    FileUtils.cp('./files/app/views/calendar/_day_info.html.erb', RAILS_DIR + '/app/views/calendar')
+  else
+    puts "Skipping _day_info.html.erb\n"
+  end
+  
+else
+   puts "Copying _day_info.html.erb into app/views/calendar \n"
+   FileUtils.cp('./files/app/views/calendar/_day_info.html.erb', RAILS_DIR + '/app/views/calendar')
+end
+
 # check to see if the stylesheet is included
 if File.exist?(RAILS_DIR + '/public/stylesheets/calendar.css')
   action = ''
