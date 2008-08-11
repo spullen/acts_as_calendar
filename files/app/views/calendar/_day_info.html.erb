@@ -29,7 +29,7 @@
 <% end %>
 
 <% unless @more_events.blank? %>
-<div id="more" class="more_events">
+<div id="more" class="more_events" style="position: relative; z-index: 4;">
   <% for mevent in @more_events %>
   <div class="event">
     <span class="time" title="ends at <%= "#{mevent.read_attribute(event.class.calendar_end_dt_field).to_s(:time)}" %>">
