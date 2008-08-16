@@ -41,14 +41,6 @@ module ClassMethods
     # set the calendar mode if it was not set
     optional_params[:mode] = Calendar::MODE_MONTH if optional_params[:mode].nil?
     
-    # if year month and day are nil then use today as the main point
-    if year.nil? && month.nil? && day.nil?
-      year = Time.now.strftime("%Y").to_i
-      month = Time.now.strftime("%m").to_i
-      day = Time.now.strftime("%d").to_i
-    end
-    day = 1 if day.nil?
-    
     @cal = Calendar.new(year, month, day, optional_params[:mode])
     @events = {}
     
@@ -193,8 +185,8 @@ module InstanceMethods
     
     # get all of the calendar events in that range
     events = find(:all, 
-                              :conditions => conditions,
-                              :order => self.class.calendar_start_dt_field)
+                             :conditions => conditions,
+                             :order => self.class.calendar_start_dt_field)
    
     # iterate over the events found and check if there are any overlaps
     overlaps = Array.new

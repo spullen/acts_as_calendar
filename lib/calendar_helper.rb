@@ -14,28 +14,39 @@ module CalendarHelper
   def generate_calendar(calendar_data, partial='calendar/day_info')
     @events = calendar_data[0] unless calendar_data.nil?
     @cal = calendar_data[1] unless calendar_data.nil?
+    
+    if !@cal.nil?
+      header =  calendar_header(@cal)
+      calendar_header = tag(:br) + calendar_day_headers
+    else
+      header = ''
+      calendar_header = ''
+    end
+    
     case @cal.mode
         when Calendar::MODE_MONTH:
-          
-          if !@cal.nil?
-            header =  calendar_header(@cal)
-            calendar_header = tag(:br) + calendar_day_headers
-            cal_body =  calendar_body(@cal, @events, partial)
-          else
-            header = ''
-            calendar_header = ''
-            cal_body = ''
-          end
-          return content_tag(:div,(header+
+            partial = 'calendar/day_info' if partial.nil?
+            cal_body =  calendar_body(@cal, @events, partial) unless @cal.nil?
+            return content_tag(:div,(header+
                                               tag(:br) +
                                               render(:partial => 'calendar/form', :object => @cal) + 
                                               calendar_header +
                                               cal_body
                                             ), :class => 'calendar_container')
       when Calendar::MODE_WEEK:
-        # build the week view
+          partial = 'calendar/week_info' if partial.nil?
+          cal_body = calendar_week_body(@cal, @events, partial) unless @cal.nil?
+          return content_tag(:div, (header +
+                                                    tag(:br) +
+                                                    render(:partial => 'calendar/form', :object => @cal) +
+                                                    ''), :class => 'calendar_container')
       when Calendar::MODE_DAY:
-        # build the day view
+          partial = 'calendar/day_list' if partial.nil? 
+          cal_body = render :partial => partial, :object => @events
+          return content_tag(:div, (header +
+                                                     tag(:br) +
+                                                     render(:partial => 'calendar/form', :object => @cal) +
+                                                     ''), :class => 'calendar_container')
     end
   end
   
@@ -127,6 +138,19 @@ module CalendarHelper
 
       weeks = weeks.join
       return weeks
+    end
+    
+    ###################################
+    #
+    # Builds the week view of a calendar
+    # @params cal Calendar object
+    # @params events Hash
+    # @params partial
+    # @return String
+    #
+    ###################################
+    def calendar_week_body(cal, events, partial)
+        return render(:partial => partial, :object => @events, :locals => {:cal => cal})
     end
     
     ###################################
