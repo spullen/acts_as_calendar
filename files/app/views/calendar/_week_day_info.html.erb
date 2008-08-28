@@ -1,0 +1,19 @@
+<%= render :partial => 'calendar/week_day_grid' %>
+<% count = 1 %>
+<% for event in @events %>
+  <% style = 'height: ' + event.height + '%;' %>
+  <% style += 'z-index: ' + count.to_s + ';' %>
+  <% style += 'position: absolute;' %>
+  <% style += 'top: ' + event.percent_from_top + '%;' %>
+  <% event_class = 'event ' %>
+  <% event_class += 'floater ' %>
+  <% event_class += 'classroom_'+event.reservation.classroom_id.to_s %>
+  <% event.over_midnight? ? event_class += ' midnight ' : nil %>
+  <div class="<%= event_class %>" style="<%=  style %>">
+    <div class="event_head">
+      <span class="time" title="<%= event.end_time.to_s(:time) %>"><%= event.start_time.to_s(:time) %></span>
+      <span class="label" title="<%= event.label %>"><%= link_to event.label, event.reservation %></span>
+    </div>
+  </div>
+  <% count += 1 %>
+<% end %>

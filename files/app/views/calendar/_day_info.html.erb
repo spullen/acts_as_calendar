@@ -5,20 +5,22 @@
 <% for event in @events %>
   <% if count < 5 %>
     <div class="event">
-      <span class="time" title="ends at <%= event.read_attribute(event.class.calendar_end_dt_field).to_s(:time) %>">
-        <%=h event.read_attribute(event.class.calendar_start_dt_field).to_s(:time) %>
+      <span class="time" title="ends at <%=h event.end_time.to_s(:time) %>">
+        <%=h event.start_time.to_s(:time) %>
       </span>
-      <span class="label"><%=h event.read_attribute(event.class.calendar_event_title_field) %></span>
+      <span class="label"><%= link_to event.label, event.reservation, :title => event.label %></span>
     </div>    
   <% elsif count == 5 %>
     <% if more < 2 %>
       <div class="event">
-        <span class="time"><%=h event.read_attribute(event.class.calendar_start_dt_field).to_s(:time) %></span>
-        <span class="label"><%=h event.read_attribute(event.class.calendar_event_title_field) %></span>
+        <span class="time" title="ends at <%=h event.end_time.to_s(:time) %>">
+          <%=h event.start_time.to_s(:time) %>
+        </span>
+        <span class="label"><%= link_to event.label, event.reservation, :title => event.label %></span>
       </div>
     <% else %>
-      <div class="more">
-        <%= link_to "+#{more} more", '#', :onclick => "showmore" %>
+      <div id="more_link_<%= day %>" class="more">
+        <%= link_to_function "+#{more} more", "toggle_more(#{day})" %>
       </div>
     <% @more_events << event %>
     <% end %>
@@ -29,14 +31,17 @@
 <% end %>
 
 <% unless @more_events.blank? %>
-<div id="more" class="more_events" style="position: relative; z-index: 4;">
+<div id="more_<%= day %>" class="more_events" style="position: relative; z-index: 4; display: none;">
   <% for mevent in @more_events %>
   <div class="event">
-    <span class="time" title="ends at <%= "#{mevent.read_attribute(event.class.calendar_end_dt_field).to_s(:time)}" %>">
-      <%=h mevent.read_attribute(event.class.calendar_start_dt_field).to_s(:time) %>
+    <span class="time" title="ends at <%= "#{mevent.end_time.to_s(:time)}" %>">
+      <%=h mevent.start_time.to_s(:time) %>
     </span>
-    <span class="label"><%=h mevent.read_attribute(event.class.calendar_event_title_field) %></span>
+    <span class="label"><%= link_to event.label, event.reservation, :title => event.label %></span>
   </div>
   <% end %>
+  <div class="more">
+    <%= link_to_function "hide", "toggle_more(#{day})" %>
+  </div>
 </div>
 <% end %>

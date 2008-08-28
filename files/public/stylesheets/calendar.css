@@ -15,17 +15,23 @@ div.calendar_container {
 }
 
 .day_header {
+    position: relative;
   width: 126px;
   text-align: center;
   float: left;
+  z-index: 2;
 }
 
-.week{
+.week {
   height: 110px;
   overflow: visible;
 }
 
-.week .day {
+.long {
+  height: 600px;  
+}
+
+.day {
   width: 125px;
   height: 100%;
   border: 0px solid #CFD4E6;
@@ -41,62 +47,104 @@ div.calendar_container {
   overflow: visible;
 }
 
-.week .curr {
+.curr {
   background-color: #E6ECFF;
 }
 
-.week .blank {
+.blank {
   border-color: #FFF;
   background-color: #FFF;
 }
 
-.week .day .head {
+.day .head {
+  display: block;
   background-color: #DDDFFF;
   font-size: 10px;
   text-align: right;
   padding-right: 5px;
 }
 
-.week .curr .head {
+.day .head div.new_on_day {
+  float: left;
+  text-align: center;
+  font-size: 15px;
+  width: 20px;
+}
+
+.day .head div.new_on_day a {
+  display: inline-block;
+  width: 100%;
+}
+
+.day .head div.new_on_day a:hover {
+  background-color: #366492;
+  color: #FFF;
+}
+
+.curr .head {
     background-color: #CFD4E6;
 }
 
-.week .day .event {
+.day .event {
   padding: 2px;
   overflow: hidden;
 }
 
-.week .day .time {
+.day .floater {
+  width: 90%;
+  background-color: #DDDFFF;
+  margin-left: 3px;
+  border-color: #6a88af;
+  border-style: dotted;
+  border-width: 1px 0 1px 0;
+  overflow: hidden;
+}
+
+.day .floater .event_head {
+  background-color: #CFD4E6;
+}
+
+.day .midnight {
+  border-bottom-width: 0px;
+}
+
+.day .time {
   font-weight: bold;
 }
 
-.week .day .label {
+.day .label {
   cursor: pointer;
 }
 
-.week .day .more {
+.day .more {
   text-align: center;
 }
 
-.week .day .more a {
+.day .more a {
   text-decoration: none;
   color: blue;
 }
 
-.week .day .more a:hover {
+.day .more a:hover {
   text-decoration: underline;
 }
 
-.week .day .more_events {
-	margin-left: -1px;
-	position: relative;
-	z-index: 3;
-    background-color: #FFF;
-	border-color:#CFD4E6;
-	border-style:solid;
-	border-width: 0 1px 1px 1px;
+.day .more_events {
+  margin-left: -1px;
+  position: relative;
+  z-index: 3;
+  background-color: #FFF;
+  border-color:#CFD4E6;
+  border-style:solid;
+  border-width: 0 0 1px 1px;
 }
 
 .clear_div{
   clear: both;
+}
+
+.grid_divider {
+    height: 4.16667%;
+    width: 100%;
+    border-bottom: 1px solid #CCC;
 }

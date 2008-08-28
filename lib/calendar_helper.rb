@@ -25,8 +25,8 @@ module CalendarHelper
     
     case @cal.mode
         when Calendar::MODE_MONTH:
-            partial = 'calendar/day_info' if partial.nil?
-            cal_body =  calendar_body(@cal, @events, partial) unless @cal.nil?
+            partial = 'calendar/day_info' #if partial.nil?
+            cal_body = calendar_body(@cal, @events, partial) unless @cal.nil?
             return content_tag(:div,(header+
                                               tag(:br) +
                                               render(:partial => 'calendar/form', :object => @cal) + 
@@ -34,19 +34,23 @@ module CalendarHelper
                                               cal_body
                                             ), :class => 'calendar_container')
       when Calendar::MODE_WEEK:
-          partial = 'calendar/week_info' if partial.nil?
-          cal_body = calendar_week_body(@cal, @events, partial) unless @cal.nil?
+          partial = 'calendar/week_day_info' #if partial.nil?
+          cal_body = calendar_body(@cal, @events, partial) unless @cal.nil?
           return content_tag(:div, (header +
                                                     tag(:br) +
                                                     render(:partial => 'calendar/form', :object => @cal) +
-                                                    ''), :class => 'calendar_container')
+                                                    calendar_header +
+                                                    cal_body
+                                                  ), :class => 'calendar_container')
       when Calendar::MODE_DAY:
-          partial = 'calendar/day_list' if partial.nil? 
+          partial = 'calendar/day_list' #if partial.nil? 
           cal_body = render :partial => partial, :object => @events
           return content_tag(:div, (header +
                                                      tag(:br) +
                                                      render(:partial => 'calendar/form', :object => @cal) +
-                                                     ''), :class => 'calendar_container')
+                                                     calendar_header +
+                                                     cal_body
+                                                   ), :class => 'calendar_container')
     end
   end
   
@@ -95,6 +99,11 @@ module CalendarHelper
         end
       end
 
+      week_style = 'week'
+      if cal.mode == Calendar::MODE_WEEK
+        week_style += ' long'
+      end
+    
       # build the rest of the calendar
       cal.start_date.upto(cal.end_date) { |date| 
         dow = date.strftime("%w").to_i
@@ -108,17 +117,23 @@ module CalendarHelper
         end
         
         # build the day div w/ the data that should be put there
-        content = link_to(date.strftime("%d").to_s, :action => 'calendar', :params => {:mode => 'day', :year => date.year, :month => date.month, :day => date.day}) + tag(:br)
+        content = link_to('+', {:action => 'new', 
+                               :year => date.year, 
+                                           :month => date.month,
+                                           :day => date.day}, 
+                               :class => 'new_on_day')
+        content = content_tag(:div, content, :class => 'new_on_day')
+        content += link_to(date.strftime("%d").to_s, :action => 'calendar', :params => {:mode => 'day', :year => date.year, :month => date.month, :day => date.day}) + tag(:br)
         content = content_tag(:div, content, :class => 'head')
         if !events[date.to_s].nil? && !partial.nil?
           @events = events[date.to_s]
-          content += render(:partial => partial, :object => @events) 
+          content += render(:partial => partial, :object => @events, :locals => {:day => date.yday.to_s}) 
         end
         week << content_tag(:div, content, :class => style)
         
-        if dow != 0 && ((dow % 6) == 0) && date.strftime("%w").to_i < 28
+        if dow != 0 && ((dow % 6) == 0) && date.strftime("%w").to_i < 28 && @cal.mode == Calendar::MODE_MONTH
           week << content_tag(:div, '', :class => 'clear_div')
-          weeks << content_tag(:div, week.join, :class => 'week')
+          weeks << content_tag(:div, week.join, :class => week_style)
           week.clear
         end
       }
@@ -133,7 +148,7 @@ module CalendarHelper
       end
       
       # combine all of the weeks to finish the calendar build
-      weeks << content_tag(:div, week.join, :class => 'week')
+      weeks << content_tag(:div, week.join, :class => week_style)
       week.clear
 
       weeks = weeks.join
@@ -149,8 +164,51 @@ module CalendarHelper
     # @return String
     #
     ###################################
-    def calendar_week_body(cal, events, partial)
-        return render(:partial => partial, :object => @events, :locals => {:cal => cal})
+    def calendar_week_body(cal, events=nil, partial=nil)
+      weeks = Array.new
+      week = Array.new
+
+      # build the rest of the calendar
+      cal.start_date.upto(cal.end_date) { |date| 
+        dow = date.strftime("%w").to_i
+        
+        # figure out the class name
+        style = 'day long'
+        unless cal.selected_date.nil?
+          if cal.selected_date == date
+            style += ' curr'
+          end
+        end
+        
+        # build the day div w/ the data that should be put there
+        content = link_to('+', {:action => 'new', 
+                               :year => date.year, 
+                                           :month => date.month,
+                                           :day => date.day}, 
+                               :class => 'new_on_day')
+        content = content_tag(:div, content, :class => 'new_on_day')
+        content += link_to(date.strftime("%d").to_s, :action => 'calendar', :params => {:mode => 'day', :year => date.year, :month => date.month, :day => date.day}) + tag(:br)
+        content = content_tag(:div, content, :class => 'head')
+        if !events[date.to_s].nil? && !partial.nil?
+          @events = events[date.to_s]
+          content += render(:partial => partial, :object => @events, :locals => {:day => date.yday.to_s}) 
+        end
+        week << content_tag(:div, content, :class => style)
+        
+#        if dow != 0 && ((dow % 6) == 0) && date.strftime("%w").to_i < 28
+#          week << content_tag(:div, '', :class => 'clear_div')
+#          weeks << content_tag(:div, week.join, :class => 'week')
+#          week.clear
+#        end
+      }
+
+      # combine all of the weeks to finish the calendar build
+      weeks << content_tag(:div, week.join, :class => 'week')
+      week.clear
+
+      weeks = weeks.join
+      
+      return weeks
     end
     
     ###################################
@@ -159,6 +217,6 @@ module CalendarHelper
     #
     ###################################
     def alt_am_pm_datetime(_datetime, format="%h:%m %p")
-      return _datetime.strftime(format).gsub(/AM/, "a.m.").gsub(/PM/, "p.m")
+      return _datetime.strftime(format).gsub(/AM/, "a.m.").gsub(/PM/, "p.m.")
     end
 end

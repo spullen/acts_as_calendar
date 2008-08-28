@@ -14,11 +14,15 @@ module ClassMethods
   #
   ########################################
   def acts_as_calendar(options={})
-    cattr_accessor :calendar_start_dt_field, :calendar_end_dt_field, :calendar_event_title_field
+    cattr_accessor :calendar_start_dt_field, 
+                   :calendar_end_dt_field, 
+                   :calendar_event_title_field,
+                   :calendar_start_time_field
     
     self.calendar_start_dt_field = (options[:calendar_start_dt_field] || :start_dt).to_s
     self.calendar_end_dt_field = (options[:calendar_end_dt_field] || :end_dt).to_s
     self.calendar_event_title_field = (options[:calendar_event_title_field] || :event_title).to_s
+    self.calendar_start_time_field = (options[:calendar_start_time_field] || :start_time).to_s
     
     send :include, InstanceMethods
   end
@@ -74,7 +78,7 @@ module ClassMethods
     # get all of the events for that range
     event_data = find(:all, 
                                     :conditions => conditions,
-                                    :order => self.calendar_start_dt_field + ' ASC')
+                                    :order => self.calendar_start_time_field + ' ASC')
      
     # add each event into the correct date field in the @events hash
     event_data.each do |event_datum|

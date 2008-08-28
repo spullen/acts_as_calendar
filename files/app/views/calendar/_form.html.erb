@@ -13,27 +13,27 @@
     <br/><br/>
     <% unless @cal.nil? -%>   
       <span class="cal_nav_link">
-        <%= link_to '<<< Prev Year', :action => :calendar, :params => {:year => @cal.prev_year.year, :month => @cal.prev_year.month, :day => @cal.prev_year.day} %>
+        <%= link_to '<<< Prev Year', :action => :calendar, :params => {:year => @cal.prev_year.year, :month => @cal.prev_year.month, :day => @cal.prev_year.day, :mode => @cal.mode } %>
       </span>
       &nbsp;
       <span class="cal_nav_link">
-        <%= link_to '<< Prev Month', :action => :calendar, :params => {:year => @cal.prev_month.year, :month => @cal.prev_month.month, :day => @cal.prev_month.day} %>
+        <%= link_to '<< Prev Month', :action => :calendar, :params => {:year => @cal.prev_month.year, :month => @cal.prev_month.month, :day => @cal.prev_month.day, :mode => @cal.mode } %>
       </span>
       &nbsp;
       <span class="cal_nav_link">
-        <%= link_to '< Prev Day', :action => :calendar, :params => {:year => @cal.prev_day.year, :month => @cal.prev_day.month, :day => @cal.prev_day.day} %>
+        <%= link_to '< Prev Day', :action => :calendar, :params => {:year => @cal.prev_day.year, :month => @cal.prev_day.month, :day => @cal.prev_day.day, :mode => @cal.mode } %>
       </span>
       &nbsp;&nbsp;
       <span class="cal_nav_link">
-        <%= link_to 'Next Day >', :action => :calendar, :params => {:year => @cal.next_day.year, :month => @cal.next_day.month, :day => @cal.next_day.day} %>
+        <%= link_to 'Next Day >', :action => :calendar, :params => {:year => @cal.next_day.year, :month => @cal.next_day.month, :day => @cal.next_day.day, :mode => @cal.mode } %>
       </span>
       &nbsp;
       <span class="cal_nav_link">
-        <%= link_to 'Next Month >>', :action => :calendar, :params => {:year => @cal.next_month.year, :month => @cal.next_month.month, :day => @cal.next_month.day} %>
+        <%= link_to 'Next Month >>', :action => :calendar, :params => {:year => @cal.next_month.year, :month => @cal.next_month.month, :day => @cal.next_month.day, :mode => @cal.mode } %>
       </span>
       &nbsp;
       <span class="cal_nav_link">
-        <%= link_to 'Next Year >>>', :action => :calendar, :params => {:year => @cal.next_year.year, :month => @cal.next_year.month, :day => @cal.next_year.day} %>
+        <%= link_to 'Next Year >>>', :action => :calendar, :params => {:year => @cal.next_year.year, :month => @cal.next_year.month, :day => @cal.next_year.day, :mode => @cal.mode } %>
       </span>
   <% end -%>
 </div>

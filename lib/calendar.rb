@@ -82,7 +82,7 @@ class Calendar
   #####################################
   def configure_week_mode
     dow = @selected_date.strftime("%w").to_i
-    
+
     if dow == 0
       @start_date = @selected_date
     else
