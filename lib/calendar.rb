@@ -7,9 +7,10 @@ class Calendar
   MODE_WEEK = 'week'
   MODE_DAY = 'day'
   
-  attr_accessor :year, :month, :day, :selected_date, :start_date, :start_dow, :end_date, :end_dow,
-                              :prev_day, :prev_week, :prev_month, :prev_year, :next_day, :next_week, :next_month, :next_year,
-                              :month_name, :mode
+  attr_accessor :year, :month, :day, :selected_date, :start_date, :start_dow,
+                :end_date, :end_dow, :prev_day, :prev_week, :prev_month,
+                :prev_year, :next_day, :next_week, :next_month, :next_year,
+                :month_name, :mode
   
   def initialize(year, month, day, mode=MODE_MONTH)
     
@@ -32,7 +33,7 @@ class Calendar
     
     @mode = mode
     
-    # fail 'month not in range' if @month < 1 || @month > 12
+    fail 'month not in range' if @month < 1 || @month > 12
     
     @selected_date = Date.new(@year, @month, @day)
     
@@ -61,7 +62,12 @@ class Calendar
   def configure_month_mode
     # find the start date of the month
     @start_date = Date.new(@year, @month, 1)
-    
+
+    # Roll back to find sunday
+    while(@start_date.wday != 0) do
+      @start_date = @start_date - 1
+    end
+
     # find the end date of the month
     if (@month % 12) == 0
       @end_date = Date.new(@year+1, 1, 1)
@@ -69,10 +75,15 @@ class Calendar
       @end_date = Date.new(@year, @month+1, 1)
     end
     @end_date = @end_date - 1
-    
+
+    # Roll forward to find saturday
+    while(@end_date.wday != 6) do
+      @end_date = @end_date + 1
+    end
+
     # find the start and end dow
-    @start_dow = @start_date.strftime("%w").to_i
-    @end_dow = @end_date.strftime("%w").to_i
+    @start_dow = @start_date.wday
+    @end_dow = @end_date.wday
   end
   
   #####################################
@@ -81,18 +92,16 @@ class Calendar
   #
   #####################################
   def configure_week_mode
-    dow = @selected_date.strftime("%w").to_i
-
-    if dow == 0
+    if @selected_date.wday == 0
       @start_date = @selected_date
     else
-      @start_date = (@selected_date - @selected_date.strftime("%w").to_i)
+      @start_date = (@selected_date - @selected_date.wday)
     end
     
     @end_date = @start_date + 6
     
-    @start_dow = @start_date.strftime("%w").to_i
-    @end_dow = @end_date.strftime("%w").to_i 
+    @start_dow = @start_date.wday
+    @end_dow = @end_date.wday
   end
   
   #####################################
@@ -103,7 +112,7 @@ class Calendar
   def configure_day_mode
     @start_date = @selected_date
     @end_date = @selected_date
-    @start_dow = @start_date.strftime("%w").to_i
+    @start_dow = @start_date.wday
     @end_dow = @start_dow
   end
   
@@ -145,7 +154,6 @@ class Calendar
   #
   #####################################
   def find_prev_date_set
-    # find the prev and next everything
     @prev_day = @selected_date - 1
     @prev_week = @selected_date - 7
     
